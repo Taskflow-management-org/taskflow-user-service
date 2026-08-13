@@ -10,6 +10,7 @@
 target/
 build/
 *.jar
+!.mvn/wrapper/maven-wrapper.jar
 *.war
 
 # OS Generated Files
