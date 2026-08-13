@@ -73,6 +73,17 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           script: |
             cd ~/app
-            docker compose -f docker-compose.app.yml pull user-service
-            docker compose -ff docker-compose.app.yml up -d user-service
-            docker system prune -f
+            
+            if [ -f docker-compose-app.yml ]; then
+              echo "Pulling latest user-service image..." 
+              docker compose -f docker-compose-app.yml pull user-service
+            
+              echo "Starting user-service container..."
+              docker compose -f docker-compose-app.yml up -d user-service
+            
+              echo "Cleaning up old unused docker images..."
+              docker system prune -f
+            else
+              echo "Error: docker-compose.app.yml not found in ~/app directory!"
+              exit 1
+            fi
